@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>vue example</title>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+<script src="webjars/vue/dist/vue.min.js"></script>
+</head>
+<body>
+	<div id="app">{{ message }}</div>
+	<div id="app-2">
+		<span v-bind:title="message">鼠标悬停几秒钟查看此处动态绑定的提示信息！ </span>
+	</div>
+	<div id="app-3">
+		<p v-if="seen">现在你看到我了</p>
+	</div>
+	<div id="app-4">
+		<ol>
+			<li v-for="todo in todos">{{ todo.text }}</li>
+		</ol>
+	</div>
+	<div id="app-5">
+		<p>{{ message }}</p>
+		<button v-on:click="reverseMessage">逆转消息</button>
+	</div>
+	<div id="app-6">
+		<p>{{ message }}</p>
+		<input v-model="message">
+	</div>
+	<div id="todo-list-example">
+		<input
+		  v-model="newTodoText"
+		  v-on:keyup.enter="addNewTodo"
+		  placeholder="Add a todo"
+		>
+		<ul>
+		  <li
+		    is="todo-item"
+		    v-for="(todo, index) in todos"
+		    v-bind:key="todo.id"
+		    v-bind:title="todo.title"
+		    v-on:remove="todos.splice(index, 1)"
+		  ></li>
+	  </ul>
+	</div>
+	<div id="example-1">
+	  <button v-on:click="counter += 1">增加 1</button>
+	  <p>这个按钮被点击了 {{ counter }} 次。</p>
+	</div>
+	<div id="example-2">
+	  <!-- `greet` 是在下面定义的方法名 -->
+	  <button v-on:click="greet">Greet</button>
+	</div>
+	<div id="example-3">
+	  <button v-on:click="say('hi')">Say hi</button>
+	  <button v-on:click="say('what')">Say what</button>
+	</div>
+	<script>
+		var app = new Vue({
+			el : '#app',
+			data : {
+				message : 'Hello Vue!'
+			}
+		})
+		var app2 = new Vue({
+			el : '#app-2',
+			data : {
+				message : '页面加载于 ' + new Date().toLocaleString()
+			}
+		})
+		var app3 = new Vue({
+			el : '#app-3',
+			data : {
+				seen : true
+			}
+		})
+		var app4 = new Vue({
+			el : '#app-4',
+			data : {
+				todos : [ {
+					text : '学习 JavaScript'
+				}, {
+					text : '学习 Vue'
+				}, {
+					text : '整个牛项目'
+				} ]
+			}
+		})
+		var app5 = new Vue({
+			el : '#app-5',
+			data : {
+				message : 'Hello Vue.js!'
+			},
+			methods : {
+				reverseMessage : function() {
+					this.message = this.message.split('').reverse().join('')
+				}
+			}
+		})
+		var app6 = new Vue({
+			el : '#app-6',
+			data : {
+				message : 'Hello Vue!'
+			}
+		})
+		
+		Vue.component(
+			'todo-item', {
+				template : '\ <li>\ {{ title }}\ <button v-on:click="$emit(\'remove\')">X</button>\ ',
+				props : [ 'title' ]
+			}
+		)
+		new Vue({
+			el : '#todo-list-example',
+			data : {
+				newTodoText : '',
+				todos : [ {
+					id : 1,
+					title : 'Do the dishes',
+				}, {
+					id : 2,
+					title : 'Take out the trash',
+				}, {
+					id : 3,
+					title : 'Mow the lawn'
+				} ],
+				nextTodoId : 4
+			},
+			methods : {
+				addNewTodo : function() {
+					this.todos.push({
+						id : this.nextTodoId++,
+						title : this.newTodoText
+					})
+					this.newTodoText = ''
+				}
+			}
+		})
+		var example1 = new Vue({
+		  el: '#example-1',
+		  data: {
+		    counter: 0
+		  }
+		})
+		var example2 = new Vue({
+		  el: '#example-2',
+		  data: {
+		    name: 'Vue.js'
+		  },
+		  // 在 `methods` 对象中定义方法
+		  methods: {
+		    greet: function (event) {
+		      // `this` 在方法里指当前 Vue 实例
+		      alert('Hello ' + this.name + '!')
+		      // `event` 是原生 DOM 事件
+		      if (event) {
+		        alert(event.target.tagName)
+		      }
+		    }
+		  }
+		})
+		new Vue({
+		  el: '#example-3',
+		  methods: {
+		    say: function (message) {
+		      alert(message)
+		    }
+		  }
+		})
+	</script>
+</body>
+</html>
